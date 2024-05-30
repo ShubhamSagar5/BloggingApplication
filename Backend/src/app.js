@@ -4,6 +4,7 @@ import cors from 'cors'
 import expressFileUpload from 'express-fileupload'
 import cookieParser from 'cookie-parser'
 import { dbConnection } from './database/dbConnection.js'
+import { errorMiddleware } from './middleware/error.js'
 
 const app = express()
 
@@ -35,5 +36,7 @@ app.get("/",(req,res)=>{
 })
 
 dbConnection()
+
+app.use(errorMiddleware)
 
 export default app
