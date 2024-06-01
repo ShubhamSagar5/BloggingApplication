@@ -1,6 +1,7 @@
 import { asyncHandler } from "../middleware/catchAsyncError.js"
 import ErrorHandler from "../middleware/error.js"
 import { User } from "../models/userSchema.js"
+import { sendToken } from "../utils/sendToken.js"
 
 
 
@@ -29,10 +30,10 @@ export const register = asyncHandler(async(req,res,next)=>{
 
    
 )
- return res.status(200).json({
-        success:true,
-        message:"User Register Successfully"
-    })
+
+sendToken(user,200,"User Register Successfully",res)
+
+
 })
 
 
@@ -44,7 +45,7 @@ export const login = asyncHandler(async(req,res,next)=>{
         return next(new ErrorHandler("Please Provide All Deatils",400))
     }
 
-    let user = await User.findOne({email})
+    let user = await User.findOne({email}).select("+password")
 
     if(!user){
         return next(new ErrorHandler("User Not Found Please Provide valid Email"))
@@ -60,8 +61,9 @@ export const login = asyncHandler(async(req,res,next)=>{
         return next(new ErrorHandler("User Role Not Match with Existing User"))
     }
 
-    return res.status(200).json({
-        success:true,
-        message:"User login successfully"
-    })
+    // let userData = await User.findOne({email})
+
+    sendToken(user,200,"User login successfully",res)
+
+    
 })

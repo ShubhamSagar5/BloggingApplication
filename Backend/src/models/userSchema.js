@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
-
+import jwt from 'jsonwebtoken'
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -41,7 +41,8 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
         minLength:[8,"Password Contain atleast 8 Character"],
-        maxLength:[10,"Password Not Exceeding More Than 10 Character"]
+        maxLength:[10,"Password Not Exceeding More Than 10 Character"],
+        select: false,
     },
     createdOn:{
         type:Date,
@@ -61,5 +62,12 @@ userSchema.pre('save',async function(next){
 userSchema.methods.isPasswordCorrect = async function (password){
     return await bcrypt.compare(password,this.password)
 }
+
+userSchema.methods.generateToken = function () {
+    return jwt.sign({id:this._id},process.env.JWT_SECRETKEY,{
+        expiresIn:process.env.JWT_EXPIRE
+    })
+}
+
 
 export const User = mongoose.model("User",userSchema)
