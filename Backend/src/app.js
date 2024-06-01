@@ -5,6 +5,8 @@ import expressFileUpload from 'express-fileupload'
 import cookieParser from 'cookie-parser'
 import { dbConnection } from './database/dbConnection.js'
 import { errorMiddleware } from './middleware/error.js'
+import userRouter from './routes/userRoutes.js'
+
 
 const app = express()
 
@@ -34,6 +36,9 @@ app.use(cookieParser())
 app.get("/",(req,res)=>{
     res.send(`<h2>Hello Blog Application Backend</h2>`)
 })
+
+app.use('/api/v1',userRouter)
+
 
 dbConnection()
 
