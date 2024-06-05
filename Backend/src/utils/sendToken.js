@@ -19,3 +19,4 @@ export const sendToken = async (user,statusCode,message,res) => {
     })
 
 }
+

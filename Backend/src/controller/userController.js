@@ -67,3 +67,50 @@ export const login = asyncHandler(async(req,res,next)=>{
 
     
 })
+
+
+export const logout = async(req,res,next)=> {
+    try {
+        
+        res.status(200).cookie("token",null,{
+            expires: new Date(Date.now()),
+            httpOnly:true
+        }).json({
+            success:true,
+            message:"User logOut Successfully"
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+
+export const getMyProfile = async(req,res,next)=>{
+
+    try {
+        const user = req.user 
+    
+        if(!user){
+            return res.status(400).json({
+                success:false,
+                message:"User Profile Not Found Please Login "
+            })
+        }
+    
+        return res.status(200).json({
+            success:true,
+            message:"user information Get Successfully",
+            user
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+
+}
