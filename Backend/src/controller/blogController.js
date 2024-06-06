@@ -31,7 +31,7 @@ export const blogPost = asyncHandler(async(req,res,next)=>{
     const authorName = req.user.name
     const authorAvatar = req.user.avatar.url
 
-    console.log(req.user)
+    
 
     const uploadImagePromise = [
         mainImage ? cloudinary.uploader.upload(mainImage.tempFilePath) : Promise.resolve(null),
