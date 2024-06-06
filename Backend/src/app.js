@@ -37,7 +37,7 @@ app.get("/",(req,res)=>{
     res.send(`<h2>Hello Blog Application Backend</h2>`)
 })
 
-app.use('/api/v1',userRouter)
+app.use('/api/v1/user',userRouter)
 
 
 dbConnection()

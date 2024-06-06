@@ -77,7 +77,7 @@ export const logout = async(req,res,next)=> {
             httpOnly:true
         }).json({
             success:true,
-            message:"User logOut Successfully"
+            message:"User LogOut Successfully"
         })
 
     } catch (error) {
@@ -114,3 +114,18 @@ export const getMyProfile = async(req,res,next)=>{
     }
 
 }
+
+export const getAllAuthor = asyncHandler(async(req,res,next)=>{
+
+    const author = await User.find({role:"Author"}) 
+
+    if(!author){
+        return next(new ErrorHandler("No Author Found ",404))
+    }
+
+    return res.status(200).json({
+        success:true,
+        message:"Author Get Successfully",
+        author
+    })
+})
