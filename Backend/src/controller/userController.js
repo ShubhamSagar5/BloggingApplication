@@ -2,14 +2,26 @@ import { asyncHandler } from "../middleware/catchAsyncError.js"
 import ErrorHandler from "../middleware/error.js"
 import { User } from "../models/userSchema.js"
 import { sendToken } from "../utils/sendToken.js"
-
+import cloudinary from 'cloudinary'
 
 
 export const register = asyncHandler(async(req,res,next)=>{
 
+    const {avatar} = req.files 
+
+    const allowedTypes = ["image/png","image/jpeg","image/webp"] 
+
+    if(!allowedTypes.includes(avatar.mimetype)){
+        return next(new ErrorHandler("File Type Not Support.Only Png,Jpeg,Webp Types are Allowed",400))
+    }
+
+    if(!avatar || Object.keys(req.files.avatar).length == 0 ){
+        return next(new ErrorHandler("please upload Avatar image"))
+    }
+
     const {name,email,password,phone,role,education} = req.body 
 
-    if(!name || !email || !password || !phone || !role || !education){
+    if(!name || !email || !password || !phone || !role || !education || !avatar){
         return next(new ErrorHandler("Please Fill Full Details",400))
     }
 
@@ -19,13 +31,28 @@ export const register = asyncHandler(async(req,res,next)=>{
         return next (new ErrorHandler("User Already Register",400))
     }
 
+    const cloudinaryResponse = await cloudinary.uploader.upload(avatar.tempFilePath)
+
+    if(!cloudinaryResponse || cloudinaryResponse.error){
+        console.error("Cloudinary Error:",
+        cloudinaryResponse.error || "Unknown Cloudinary error"
+      );
+      return next(
+        new ErrorHandler("Failed To Upload Doctor Avatar To Cloudinary", 500)
+      );
+    }
+
     user = await User.create({
         name,
         email,
         password,
         phone,
         role,
-        education
+        education,
+        avatar:{
+            public_id: cloudinaryResponse.public_id,
+            url: cloudinaryResponse.secure_url,
+        }
     }
 
    
