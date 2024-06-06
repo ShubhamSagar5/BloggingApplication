@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 import { dbConnection } from './database/dbConnection.js'
 import { errorMiddleware } from './middleware/error.js'
 import userRouter from './routes/userRoutes.js'
-
+import blogRouter from './routes/blogRoutes.js'
 
 const app = express()
 
@@ -38,6 +38,7 @@ app.get("/",(req,res)=>{
 })
 
 app.use('/api/v1/user',userRouter)
+app.use('/api/v1/blog',blogRouter)
 
 
 dbConnection()
