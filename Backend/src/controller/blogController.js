@@ -22,7 +22,7 @@ export const blogPost = asyncHandler(async(req,res,next)=>{
         return next (new ErrorHandler("File Type Does Not Support.It Will only Support PNG,JPEG,WEBP Types",400))
     }
 
-    const {title,intro,category,paraOneDescription,paraOneTitle,paraTwoDescription,paraTwoTitle,paraThreeDescription,paraThreeTitle} = req.body 
+    const {title,intro,category,paraOneDescription,paraOneTitle,paraTwoDescription,paraTwoTitle,paraThreeDescription,paraThreeTitle,published} = req.body 
     if(!title,!intro,!category){
         return next (new ErrorHandler("Title ,Introduction, Category is Required"))
     }
@@ -64,6 +64,7 @@ export const blogPost = asyncHandler(async(req,res,next)=>{
             public_id:mainImageRes.public_id,
             url:mainImageRes.secure_url
         },
+        published
         
     }
 
@@ -100,3 +101,182 @@ export const blogPost = asyncHandler(async(req,res,next)=>{
 
 })
 
+export const  getSingleBlog = asyncHandler(async(req,res,next)=>{
+
+    const {id} = req.params 
+
+    const blog = await Blog.findById(id) 
+
+    if(!blog){
+        return next (new ErrorHandler("Blog Not Found",404))
+    }
+
+    return res.status(200).json({
+        success:true,
+        message:"Blog Found Successfully",
+        blog
+    })
+
+})
+
+
+export const getAllBlogs = asyncHandler(async(req,res,next)=>{
+
+    const blogs = await Blog.find({published:true}) 
+
+    if(!blogs){
+        return next (new ErrorHandler("Blogs Not Found",404))
+    }
+
+    return res.status(200).json({
+        success:true,
+        message:"All Blogs Fetch Successfully",
+        blogs
+    })
+
+})
+
+
+export const deleteBlogs = asyncHandler(async(req,res,next)=>{
+
+    const {id} = req.params 
+
+    const blog = await Blog.findById(id) 
+
+    if(!blog){
+        return next (new ErrorHandler("Blog Not Found",400))
+    }
+
+    await blog.deleteOne() 
+
+    return res.status(200).json({
+        success:true,
+        message:"Blogs Delete Successfully"
+    })
+
+})
+
+export const getMyBlog = asyncHandler(async(req,res,next)=>{
+
+    const createdById  = req.user?._id
+    const myBlog = await Blog.find({createdBy:createdById})
+
+    if(!myBlog){
+        return next (new ErrorHandler("Blogs Are Not Found",404))
+    }
+
+    return res.status(200).json({
+        success:true,
+        message:"Blog Fetch Successfully",
+        myBlog
+    })
+})
+
+
+export const updateBlogs = asyncHandler(async(req,res,next)=>{
+
+    const {id} = req.params 
+
+    let blog = await Blog.findById(id)
+
+    if(!blog){
+        return next (new ErrorHandler("Blog Not Found",400))
+    }
+
+    const {title,intro,paraOneDescription,paraOneTitle,paraTwoDescription,paraTwoTitle,paraThreeDescription,paraThreeTitle,category,published} = req.body
+
+    const newData = {
+        title,
+        intro,
+        paraOneDescription,
+        paraOneTitle,
+        paraTwoDescription,
+        paraTwoTitle,
+        paraThreeDescription,
+        paraThreeTitle,
+        category,
+        published
+    }
+
+
+        
+
+    if(req.files){
+
+           const {mainImage,paraOneImage,paraTwoImage,paraThreeImage} = req.files 
+
+            const allowedTypes = ["image/png","image/jpeg","image/webp"]
+
+
+        if((mainImage && !allowedTypes.includes(mainImage.mimetype)) || (paraOneImage && !allowedTypes.includes(paraOneImage.mimetype)) || (paraTwoImage && !allowedTypes.includes(paraTwoImage.mimetype)) || (paraThreeImage && !allowedTypes.includes(paraThreeImage.mimetype))){
+            return next (new ErrorHandler("Invalid file format. Only PNG, JPG and WEBp formats are allowed.",
+          400))
+        }
+    
+
+         if(req.files && mainImage){
+            const blogMainImageId = blog.mainImage.public_id 
+            await cloudinary.uploader.destroy(blogMainImageId) 
+
+            const newBlogMainImage = await cloudinary.uploader.upload(mainImage.tempFilePath) 
+
+            newData.mainImage = {
+                public_id:newBlogMainImage.public_id,
+                url:newBlogMainImage.secure_url
+            }
+
+         }
+
+         if(req.files && paraOneImage){
+            const blogParaOneImageId = blog.paraOneImage.public_id 
+            await cloudinary.uploader.destroy(blogParaOneImageId) 
+
+            const newBlogParaOneImage = await cloudinary.uploader.upload(paraOneImage.tempFilePath) 
+
+            newData.paraOneImage = {
+                public_id:newBlogParaOneImage.public_id,
+                url:newBlogParaOneImage.secure_url
+            }
+
+         }
+
+         if(req.files && paraTwoImage){
+            const blogParaTwoImageId = blog.paraTwoImage.public_id 
+            await cloudinary.uploader.destroy(blogParaTwoImageId) 
+
+            const newBlogParaTwoImage = await cloudinary.uploader.upload(paraTwoImage.tempFilePath) 
+
+            newData.paraTwoImage ={
+                public_id:newBlogParaTwoImage.public_id, 
+                url:newBlogParaTwoImage.secure_url
+            }
+         }
+
+         if(req.files && paraThreeImage){
+            const blogParaThreeImageId = blog.paraThreeImage.public_id 
+            await cloudinary.uploader.destroy 
+
+            const newBlogParaThreeImage = await cloudinary.uploader.upload(paraThreeImage.tempFilePath)
+
+            newData.paraThreeImage = {
+                public_id:newBlogParaThreeImage.public_id ,
+                url:newBlogParaThreeImage.secure_url
+            }
+         }
+    
+    }
+
+    blog = await Blog.findByIdAndUpdate(id,newData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify: false,
+    })
+
+    return res.status(200).json({
+        success:true,
+        message:"Blog Update Successfully",
+        blog
+    })
+   
+
+})
