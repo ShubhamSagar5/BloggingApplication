@@ -22,6 +22,9 @@ const App = () => {
   
   const {user,setUser,isAuthenticated,setIsAuthenticated,blogs,setBlogs} = useContext(Context)
 
+  const fetch
+
+
 
   return (
     <>
