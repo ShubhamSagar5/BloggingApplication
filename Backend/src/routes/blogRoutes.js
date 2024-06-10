@@ -8,7 +8,7 @@ router.post('/createBlog',isAuthenticated,isAuthorize("Author"),blogPost)
 
 router.get('/getSingleBlog/:id',isAuthenticated,isAuthorize("Author"),getSingleBlog)
 
-router.get('/getAllBlog',isAuthenticated,isAuthorize("Author"),getAllBlogs)
+router.get('/getAllBlog',getAllBlogs)
 
 router.delete('/deleteBlog/:id',isAuthenticated,isAuthorize("Author"),deleteBlogs)
 

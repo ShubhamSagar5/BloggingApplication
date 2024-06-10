@@ -7,13 +7,13 @@ import PopularAuthors from '../miniComponents/PopularAuthors'
 
 const Home = () => {
   
-  const {mode ,setMode} = useContext(Context)
-
+  const { mode, blogs } = useContext(Context);
+  const filteredBlogs = blogs.slice(2, 9);
   return (
     <article className={mode === "dark" ? "dark-bg" : "light-bg"}>
       <HeroSection/>
       <TrendingBlogs/>
-      <LatestBlogs/>
+      <LatestBlogs heading={"Latest Blogs"} blogs={filteredBlogs} />
       <PopularAuthors/>
     </article>
   )

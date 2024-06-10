@@ -17,7 +17,7 @@ const Navbar = () => {
   const isDashboard = useLocation("http://localhost:5173/dashboard");
   
   const { mode, setMode, isAuthenticated, user, setIsAuthenticated } = useContext(Context);
-  console.log(mode)
+ 
   const navigateTo = useNavigate();
   const handleLogout = async (e) => {
     e.preventDefault();

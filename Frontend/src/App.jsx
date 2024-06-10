@@ -20,10 +20,41 @@ import UpdateBlog from "./components/pages/UpdateBlog";
 
 const App = () => {
   
-  const {user,setUser,isAuthenticated,setIsAuthenticated,blogs,setBlogs} = useContext(Context)
-
+  const {user,setUser,setIsAuthenticated,blogs,setBlogs} = useContext(Context)
+    
+    const fetchUser = async () => {
+      try {
+        const {data} = await axios.get("http://localhost:4000/api/v1/user/myProfile",{withCredentials:true})
+        setUser(data.user)
+        setIsAuthenticated(true)
+      } catch (error) {
+        setUser({})
+        setIsAuthenticated (false)
+        console.log(error.response.data.message)
+      }
+    }
+  
+    const fetchBlog = async() => {
+      try {
+        const {data} = await axios.get("http://localhost:4000/api/v1/blog/getAllBlog",{withCredentials:true})
+        setBlogs(data.blogs)
+      } catch (error) {
+        setBlogs([])
+        console.log(error)
+      }
+    }
+    
   
 
+  useEffect(()=>{
+    
+
+    
+    
+    
+    fetchUser()
+      fetchBlog()
+  },[])
 
 
   return (
