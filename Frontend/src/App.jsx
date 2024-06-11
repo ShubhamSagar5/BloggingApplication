@@ -15,13 +15,12 @@ import AllAuthors from "./components/pages/AllAuthors";
 import { Context } from "./main";
 import axios from "axios";
 import UpdateBlog from "./components/pages/UpdateBlog";
-import { isAuthenticated } from "../../Backend/src/middleware/auth";
 
 
 
 const App = () => {
   
-  const {user,setUser,setIsAuthenticated,blogs,setBlogs} = useContext(Context)
+  const {user,setUser,isAuthenticated,setIsAuthenticated,blogs,setBlogs} = useContext(Context)
     
     const fetchUser = async () => {
       try {
@@ -50,7 +49,7 @@ const App = () => {
   useEffect(()=>{
     fetchUser()
       fetchBlog()
-  },[isAuthenticated,user])
+  },[])
 
 
   return (

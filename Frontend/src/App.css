@@ -804,11 +804,11 @@ footer .container .news_letter div {
   text-align: center;
 }
 footer .container .news_letter div input {
-  background: #13141e;
+  background: #9fa0a5;
   padding: 8px 5px;
-  border: 1px solid #80808036;
+  border: 1px solid #00000036;
   border-radius: 7px;
-  color: #fff;
+  color: #000000;
 }
 footer .container .news_letter div input:focus {
   outline: none;
