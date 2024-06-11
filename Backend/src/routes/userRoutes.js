@@ -9,7 +9,7 @@ router.post('/register',register)
 router.post('/login',login)
 router.get('/logout',logout)
 router.get('/myProfile',isAuthenticated,getMyProfile)
-router.get("/getAllAuthor",isAuthenticated,getAllAuthor)
+router.get("/getAllAuthor",getAllAuthor)
 
 export default router
 

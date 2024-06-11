@@ -15,6 +15,7 @@ import AllAuthors from "./components/pages/AllAuthors";
 import { Context } from "./main";
 import axios from "axios";
 import UpdateBlog from "./components/pages/UpdateBlog";
+import { isAuthenticated } from "../../Backend/src/middleware/auth";
 
 
 
@@ -47,14 +48,9 @@ const App = () => {
   
 
   useEffect(()=>{
-    
-
-    
-    
-    
     fetchUser()
       fetchBlog()
-  },[])
+  },[isAuthenticated,user])
 
 
   return (
