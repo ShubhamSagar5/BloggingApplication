@@ -85,7 +85,7 @@ export const login = asyncHandler(async(req,res,next)=>{
     }
 
     if(role !== user.role){
-        return next(new ErrorHandler("User Role Not Match with Existing User"))
+        return next(new ErrorHandler(`User Role "${role}" Not Match with Existing User`))
     }
 
     // let userData = await User.findOne({email})

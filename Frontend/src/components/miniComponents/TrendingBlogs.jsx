@@ -56,7 +56,8 @@ const TrendingBlogs = () => {
             );
           })
         ) : (
-          <BeatLoader size={30} color="gray" />
+          <BeatLoader size={30} color='gray' style={{display:"flex",
+          justifyContent:"center",alignItems:"center"}}/>
         )}
       </Carousel>
     </div>
