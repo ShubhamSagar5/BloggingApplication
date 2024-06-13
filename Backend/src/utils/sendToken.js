@@ -6,7 +6,9 @@ export const sendToken = async (user,statusCode,message,res) => {
 
     const options = {
         expire:new Date(Date.now() + process.env.COOKIEEXPIRE * 24 * 60 * 60 * 100),
-        httpOnly:true
+        httpOnly:true,
+        secure:true,
+        sameSite:"None"
     }
 
     
