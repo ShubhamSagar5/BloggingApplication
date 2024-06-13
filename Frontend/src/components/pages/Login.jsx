@@ -3,12 +3,14 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../../main";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const { mode, isAuthenticated,user,setUser,setIsAuthenticated } = useContext(Context);
+  const [loading,setLoading] = useState(false)
   const navigateTo = useNavigate();
 
   const handleLogin = async (e) => {
@@ -23,6 +25,7 @@ const Login = () => {
         }
       )
       .then((res) => {
+        setLoading(true)
         fetchUser()
         toast.success(res.data.message);
         setEmail("");
@@ -32,7 +35,10 @@ const Login = () => {
       })
       .catch((error) => {
         toast.error(error.response.data.message);
-      });
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
   };
 
     const fetchUser = async () => {
@@ -82,10 +88,13 @@ const Login = () => {
           <p>
             Don't have any Account? <Link to={"/register"}>Register Now</Link>
           </p>
-
-          <button className="submit-btn" type="submit">
+          {
+           loading ? ( <BeatLoader size={30} color='gray' style={{display:"flex",
+          justifyContent:"center",alignItems:"center"}}/>) : <button className="submit-btn" type="submit">
             LOGIN
           </button>
+          }
+          
         </form>
       </section>
     </article>

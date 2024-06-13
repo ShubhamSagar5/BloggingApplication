@@ -3,9 +3,11 @@ import LatestBlogs from "./LatestBlogs";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 const MyBlogs = () => {
   const [myBlogs, setMyBlogs] = useState([]);
+  const [loading,setLoading] = useState(true)
 
   useEffect(() => {
     const fetchMyBlogs = async () => {
@@ -34,7 +36,8 @@ const MyBlogs = () => {
 
   return (
     <>
-      <section className="my-blogs">
+    {
+      myBlogs && myBlogs.length > 0 ? (<section className="my-blogs">
         {myBlogs && myBlogs.length > 0
           ? myBlogs.map((element) => {
               return (
@@ -62,7 +65,11 @@ const MyBlogs = () => {
               );
             })
           : "You have not posted any blog!"}
-      </section>
+      </section>)
+      :( <BeatLoader size={30} color='gray' style={{display:"flex",
+          justifyContent:"center",alignItems:"center"}}/>)
+    }
+      
     </>
   );
 };

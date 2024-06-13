@@ -42,7 +42,7 @@ const Chart = () => {
   const notPublishedBlogs =
     myBlogs && myBlogs.filter((blog) => blog.published === false);
 
-  console.log(publishedBlogs);
+
 
   const data = {
     labels: ["Published", "Not Published"],

@@ -30,7 +30,7 @@ const App = () => {
       } catch (error) {
         setUser({})
         setIsAuthenticated (false)
-        console.log(error.response.data.message)
+     
       }
     }
   

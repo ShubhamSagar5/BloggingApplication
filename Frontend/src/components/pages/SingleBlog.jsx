@@ -21,7 +21,7 @@ const SingleBlog = () => {
         setBlog(data.blog);
       } catch (error) {
         setBlog({});
-        console.log(error);
+       
       }finally{
         setLoading(false)
       }
