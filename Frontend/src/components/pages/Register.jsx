@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../../main";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -13,6 +14,7 @@ const Register = () => {
   const [education, setEducation] = useState("");
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setAvatarPreview] = useState("");
+  const [loading,setLoading] = useState(false)
 
   const changeAvatarHandler = (e) => {
     const file = e.target.files[0];
@@ -40,6 +42,7 @@ const Register = () => {
     formData.append("avatar", avatar);
 
     try {
+      setLoading(true)
       const { data } = await axios.post(
         "http://localhost:4000/api/v1/user/register",
         formData,
@@ -62,6 +65,8 @@ const Register = () => {
       navigateTo("/");
     } catch (error) {
       toast.error(error.response.data.message);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -145,9 +150,13 @@ const Register = () => {
           <p>
             Already Registered? <Link to={"/login"}>Login Now</Link>
           </p>
-          <button className="submit-btn" type="submit">
+          {
+            loading ? (  <BeatLoader size={30} color='gray' style={{display:"flex",
+          justifyContent:"center",alignItems:"center"}}/>) : (<button className="submit-btn" type="submit">
             REGISTER
-          </button>
+          </button>)
+          }
+          
         </form>
       </section>
     </article>

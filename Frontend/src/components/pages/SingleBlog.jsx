@@ -4,6 +4,7 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
 import Blogs from "./Blogs";
+import toast from "react-hot-toast";
 
 const SingleBlog = () => {
   const { mode, user, isAuthenticated } = useContext(Context);
@@ -29,6 +30,7 @@ const SingleBlog = () => {
     getSingleBlog();
   }, []);
   if (!isAuthenticated) {
+    toast.error("Please Login or SignUp !")
     return <Navigate to={"/"} />;
   }
 
